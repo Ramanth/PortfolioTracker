@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop Notes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .column {
+            flex: 1;
+            background-color: #f0f0f0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px;
+        }
+
+        .card {
+            background-color: #fff;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: grab;
+            border: 1px solid #ccc;
+            position: relative;
+            padding: 20px; /* Add padding to create space for text */
+        }
+
+        .popup {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            z-index: 1; /* Ensure the popup is above other content */
+        }
+
+        .card:hover .popup {
+            display: block; /* Show the popup on hover */
+        }
+
+        .progress-bar {
+            height: 10px; /* Adjust height of the progress bar */
+            width: 50%; /* Initial progress width set to 0% */
+            background-color: #4CAF50;
+            margin-top: 10px; /* Add margin to separate progress bar and text */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="column" id="column1" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h2 style="background-color: #949494">Lobby</h2>
+        </div>
+
+        <div class="column" id="column2" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h2 style="background-color: #d1001f">Port A</h2>
+            <button id="fetchDataButton">Fetch PL</button>
+            <span id="result"></span>
+        </div>
+        <div class="column" id="column3" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h2 style="background-color: #f84549">Port B</h2>
+            <button id="fetchDataButton">Fetch PL</button>
+            <span id="result"></span>
+        </div>
+        <div class="column" id="column4" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h2 style="background-color: #f69697">Port C</h2>
+            <button id="fetchDataButton">Fetch PL</button>
+            <span id="result"></span>
+        </div>
+        <div class="column" id="column5" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h2 style="background-color: #ffcbd1" >Port D</h2>
+            <button id="fetchDataButton">Fetch PL</button>
+            <span id="result"></span>
+        </div>
+        <div class="column" id="column6" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h2 style="background-color: #c6ebd5" > Removed</h2>
+        </div>
+        <div class="column" id="column7" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h2 style="background-color: #79d2a0"  >Green</h2>
+        </div>
+    </div>
+
+    <div>
+        <input type="text" id="symbol" placeholder="Symbol">
+        <input type="text" id="invested" placeholder="Invested Amount">
+        <input type="text" id="pl" placeholder="Profit/Loss">
+        <input type="text" id="cmp" placeholder="CMP">
+        <input type="text" id="note" placeholder="Notes">
+        <button onclick="createCard()">Create Card</button>
+        <button onclick="loadStateFromLocalStorage()">Load</button>
+        <button onclick="saveStateToLocalStorage()">Save</button>
+    </div>
+
+    <script>
+        let cardId = 1;
+
+        function createCard() {
+            const symbol = document.getElementById("symbol").value.trim();
+            const invested = document.getElementById("invested").value.trim();
+            const pl = document.getElementById("pl").value.trim();
+            const cmp = document.getElementById("cmp").value.trim();
+            const note = document.getElementById("note").value.trim();
+
+
+            if (symbol !== "") {
+                const card = document.createElement("div");
+                card.className = "card";
+                card.draggable = true;
+                card.id = "card" + cardId++;
+                card.setAttribute("ondragstart", "drag(event)");
+
+                const progressBar = document.createElement("div");
+                progressBar.className = "progress-bar"
+
+                const symboldiv = document.createElement("div");
+                symboldiv.className = "symbol-div"
+                symboldiv.innerText = symbol
+
+                const investeddiv = document.createElement("div");
+                investeddiv.className = "invested-div"
+                investeddiv.innerText = invested + "  " + pl
+
+                const cmpdiv = document.createElement("div");
+                cmpdiv.className = "cmp-div"
+                cmpdiv.innerText = "CMP: " + cmp
+
+                const notediv = document.createElement("div");
+                notediv.className = "note-div"
+                notediv.innerText = "Note: " + note
+                
+                card.appendChild(symboldiv);
+                card.appendChild(investeddiv);
+                card.appendChild(cmpdiv);
+                card.appendChild(notediv);
+                card.appendChild(progressBar);
+
+                document.getElementById("column1").appendChild(card);
+
+                document.getElementById("symbol").value = "";
+                document.getElementById("invested").value = "";
+                document.getElementById("pl").value = "";
+                document.getElementById("cmp").value = "";
+                document.getElementById("note").value = "";
+
+            }
+        }
+
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.id);
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const data = event.dataTransfer.getData("text");
+            const targetColumn = event.target;
+            if (targetColumn.className === "column") {
+                targetColumn.appendChild(document.getElementById(data));
+            }
+        }
+
+        // Function to save the state to local storage
+        function saveStateToLocalStorage() {
+            const columns = document.querySelectorAll('.column');
+            const state = {};
+
+            columns.forEach(column => {
+                //const stage = column.querySelector('h2').textContent;
+                const stage = column.id
+                //const cards = Array.from(column.querySelectorAll('.card')).map(card => card.textContent);
+                const cardObjects = Array.from(column.querySelectorAll('.card')).map(card => {
+                const symbol = card.querySelector('.symbol-div').textContent;
+                const invested = card.querySelector('.invested-div').textContent;
+                const cmp = card.querySelector('.cmp-div').textContent;
+                //const note = card.querySelector('.note-div').textContent;
+                const note = ""
+
+                const progressBar = card.querySelector('.progress-bar');
+                const progress = progressBar ? progressBar.style.width : '0%'; // Default to '0%' if no progress-bar found
+                return { "symbol": symbol, "invested": invested, "cmp":cmp, "note":note };
+                });
+                state[stage] = cardObjects;
+            });
+
+            localStorage.setItem('stockStateRedGreen', JSON.stringify(state));
+            createCardOnServer(state)
+
+        }
+
+        function loadStateFromLocalStorage() {
+            //const stateJSON = localStorage.getItem('cardState');
+            getNotes()
+                .then((stateJSON) => {
+                    if (stateJSON) {
+                        // const state = JSON.parse(stateJSON);
+                        const state = stateJSON[0]
+
+                        Object.keys(state).forEach((stage) => {
+                            const columnId = stage.toLowerCase().replace(' ', '');
+                            const column = document.getElementById(columnId);
+
+                            if (column) {
+                                state[stage].forEach((obj) => {
+                                    const card = document.createElement('div');
+                                    card.className = 'card';
+                                    card.draggable = true;
+                                    card.id = 'card' + cardId++;
+                                    card.setAttribute('ondragstart', 'drag(event)');
+                                
+
+                                    // const progressBar = document.createElement("div");
+                                    // progressBar.className = "progress-bar"
+
+                                    const symboldiv = document.createElement("div");
+                                    symboldiv.className = "symbol-div"
+                                    symboldiv.style.fontWeight = "bold"
+                                    symboldiv.innerText = obj.symbol
+
+                                    const investeddiv = document.createElement("div");
+                                    investeddiv.className = "invested-div"
+                                    investeddiv.innerText = obj.invested 
+
+                                    const cmpdiv = document.createElement("div");
+                                    cmpdiv.className = "cmp-div"
+                                    cmpdiv.innerText = obj.cmp
+
+                                    // const notediv = document.createElement("div");
+                                    // notediv.className = "note-div"
+                                    // notediv.innerText = obj.note
+                                    
+                                    card.appendChild(symboldiv);
+                                    card.appendChild(investeddiv);
+                                    card.appendChild(cmpdiv);
+                                    //card.appendChild(notediv);
+
+                                    invAmt = 20000 * Number(obj.invested.split(" ")[0].replace('%',''))/100
+                                    noOfShares = (invAmt/Number(obj.cmp.split(' ')[1])).toFixed(2)
+                                    noOfSharesRounded = roundShares(noOfShares)
+                                    invAmtRounded = (noOfSharesRounded * Number(obj.cmp.split(' ')[1])).toFixed(2)
+                                    invPercentRounded = (invAmtRounded/20000 * 100).toFixed(2) + "%"
+
+                                    const noOfSharesDiv = document.createElement("div");
+                                    noOfSharesDiv.className = "shares-div"
+                                    noOfSharesDiv.innerText = "Shares: "+ noOfShares + " , Inv: "+invAmt
+
+                                    const noOfSharesRoundedDiv = document.createElement("div");
+                                    noOfSharesRoundedDiv.className = "shares-rounded-div"
+                                    noOfSharesRoundedDiv.innerText = "Shares: "+ noOfSharesRounded + " , Inv: "+invAmtRounded
+                                    card.appendChild(noOfSharesRoundedDiv);
+
+                                    const percentRoundedDiv = document.createElement("div");
+                                    percentRoundedDiv.className = "percent-rounded-div"
+                                    percentRoundedDiv.innerText = " Per: "+invPercentRounded
+                                    card.appendChild(percentRoundedDiv);
+
+                                    // const progressBar = document.createElement("div");
+                                    // progressBar.className = "progress-bar"
+                                    // progressBar.style.width = invAmt
+                                    // card.appendChild(progressBar);
+
+                                    getStockPrice(obj.symbol).then((stockPrice)=> {
+                                        prevCMP = Number(obj.cmp.split(" ")[1])
+                                        diff = ((Number(stockPrice) - prevCMP)/prevCMP)*100
+                                        colorCode = getColorCodeByDiff(diff)
+                                        card.style.backgroundColor = colorCode
+
+                                        const currPriceDiv = document.createElement("div");
+                                        currPriceDiv.className = "currprice-div"
+                                        currPriceDiv.innerText = stockPrice
+                                        card.appendChild(currPriceDiv);
+
+                                        column.appendChild(card);
+                                    }).catch((error) => {
+                                        column.appendChild(card);
+                                    })
+
+                                    fetchPopupTextFromAPI(obj.symbol, function (error, text) {
+                                        if (error) {
+                                            console.error('Error fetching data:', error);
+                                        } else {
+                                            const popupdiv = document.createElement("div");
+                                            popupdiv.className = "popup"
+                                            popupdiv.innerText = text
+                                            card.appendChild(popupdiv);
+                                        }
+                                    });
+                                
+                                });
+                            }
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+
+
+        function getColorCodeByDiff(diff) {
+            if(diff < -9){
+                return "#808080"
+            }
+
+            if(diff < -7){
+                return "#949494"
+            }
+
+            if(diff < -5){
+                return "#d3d3d3"
+            }
+
+            if(diff < -3){
+                return "#d1001f"
+            }
+
+            if(diff < -2){
+                return "#f94449"
+            }
+
+            if(diff < -1){
+                return "#f69697"
+            }
+
+            if(diff < 0){
+                return "#ffcbd1"
+            }
+
+            if(diff < 1){
+                return "#c6ebd5"
+            }
+            
+            if(diff < 2){
+                return "#79d2a0"
+            }
+            
+            if(diff < 3){
+                return "#2cae6b"
+            }
+            
+            if(diff < 5){
+                return "#1b8a52"
+               
+            }
+
+            if(diff < 9){
+                
+                return "#caf0f8"  //light blue
+            }
+
+            if(diff < 12){
+                return "#48cae4"     // medium blue
+            }
+
+            return "#0F52BA" 
+        }
+
+        function createCardOnServer(cardText) {
+            const apiUrl = 'http://localhost:3000/stocks/portfolio';
+            const requestData = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(cardText), // Assuming you want to send card text as JSON
+            };
+
+            fetch(apiUrl, requestData)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP Error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log('Card created successfully:', data);
+                    // Optionally, you can perform actions after the card is created
+                })
+                .catch((error) => {
+                    console.error('Error creating card:', error);
+                    // Handle the error as needed
+                });
+        }
+
+        function getNotes() {
+            const apiUrl = 'http://localhost:3000/stocks/portfolio';
+
+            return fetch(apiUrl)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP Error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    return data;
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    throw error; // You can handle the error as needed
+                });
+        }
+
+        function getStockPrice(stockName) {
+            const apiUrl = 'http://localhost:3000/stock/price/'+stockName;
+
+            return fetch(apiUrl)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP Error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    return data;
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    throw error; // You can handle the error as needed
+                });
+        }
+
+        function getPopupText(stockName) {
+            const apiUrl = 'http://localhost:3000/stock/portfolio/popup/'+stockName;
+
+            return fetch(apiUrl)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP Error! Status: ${response.status}`);
+                    }
+                    return response;
+                })
+                .then((data) => {
+                    return data;
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    throw error; // You can handle the error as needed
+                });
+        }
+
+        function fetchPopupTextFromAPI(stockName, callback) {
+            const url = 'http://localhost:3000/stock/portfolio/popup/'+stockName;
+            const xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    callback(null, xhr.responseText); // Pass the response text to the callback
+                } else {
+                    callback(new Error(`HTTP error! Status: ${xhr.status}`), null);
+                }
+                }
+            };
+
+            xhr.open('GET', url, true);
+            xhr.send();
+        }
+
+        // Function to make the API call and update the result
+        function fetchColumnData(column) {
+            // Replace this URL with the API endpoint you want to call
+            const apiUrl = `http://localhost:3000/stock/portfolio/pl/column/${column}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // Update the <h3> element with the API result
+                        const resultElement = document.querySelector(`#${column} #result`);
+                    resultElement.textContent = `${data}`;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // Attach the fetchData function to the button's click event
+        const column2FetchBtn = document.querySelector("#column2 #fetchDataButton");
+        column2FetchBtn.addEventListener('click', function(){
+            fetchColumnData("column2")
+        });
+
+        // Attach the fetchData function to the button's click event
+        const column3FetchBtn = document.querySelector("#column3 #fetchDataButton");
+        column3FetchBtn.addEventListener('click', function(){
+            fetchColumnData("column3")
+        });
+
+        // Attach the fetchData function to the button's click event
+        const column4FetchBtn = document.querySelector("#column4 #fetchDataButton");
+        column4FetchBtn.addEventListener('click', function(){
+            fetchColumnData("column4")
+        });
+
+        // Attach the fetchData function to the button's click event
+        const column5FetchBtn = document.querySelector("#column5 #fetchDataButton");
+        column5FetchBtn.addEventListener('click', function(){
+            fetchColumnData("column5")
+        });
+
+        // Call this function when your page loads to load the saved state
+        window.addEventListener('load', function () {
+            loadStateFromLocalStorage();
+        });
+
+        //Helper functions
+        function roundShares(shares){
+            decimalPart = digitsAfterDecimal(shares)
+            if(decimalPart > 0.75){
+                return parseInt(shares + 1)
+            }
+            return parseInt(shares)
+        }
+
+        function digitsAfterDecimal(num) {
+            if (Number.isInteger(num)) {
+                return 0;
+            }
+
+            const arr = num.toString().split('.');
+
+            return parseFloat(arr[1].length)
+        }
+
+    </script>
+</body>
+
+</html>

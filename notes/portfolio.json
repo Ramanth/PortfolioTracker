@@ -1,0 +1,148 @@
+[
+  {
+    "column1": [
+      {
+        "symbol": "TATAMOTORS",
+        "invested": "20%  0",
+        "cmp": "CMP: 631",
+        "note": ""
+      },
+      {
+        "symbol": "INFOEDGE",
+        "invested": "50%  ",
+        "cmp": "CMP: 4175",
+        "note": ""
+      },
+      {
+        "symbol": "TRIDENT",
+        "invested": "10%  0",
+        "cmp": "CMP: 37.65",
+        "note": ""
+      },
+      {
+        "symbol": "SUNPHARMA",
+        "invested": "10%  ",
+        "cmp": "CMP: 1158",
+        "note": ""
+      },
+      {
+        "symbol": "SBICARD",
+        "invested": "10%  ",
+        "cmp": "CMP: 791",
+        "note": ""
+      }
+    ],
+    "column2": [
+      {
+        "symbol": "PPLPHARMA",
+        "invested": "20%  0",
+        "cmp": "CMP: 102.05",
+        "note": ""
+      },
+      {
+        "symbol": "JSWSTEEL",
+        "invested": "20%  0",
+        "cmp": "CMP: 779",
+        "note": ""
+      },
+      {
+        "symbol": "IIFLSEC",
+        "invested": "20%  ",
+        "cmp": "CMP: 86.5",
+        "note": ""
+      },
+      {
+        "symbol": "HDFCLIFE",
+        "invested": "10%  ",
+        "cmp": "CMP: 637",
+        "note": ""
+      },
+      {
+        "symbol": "ASHOKLEY",
+        "invested": "20%  ",
+        "cmp": "CMP: 177",
+        "note": ""
+      },
+      {
+        "symbol": "ENGENEERIND",
+        "invested": "10%  0",
+        "cmp": "CMP: 147",
+        "note": ""
+      }
+    ],
+    "column3": [
+      {
+        "symbol": "HAPPSTMNDS",
+        "invested": "20%  0",
+        "cmp": "CMP: 875",
+        "note": ""
+      },
+      {
+        "symbol": "BIRLASOFT",
+        "invested": "20%  ",
+        "cmp": "CMP: 484",
+        "note": ""
+      },
+      {
+        "symbol": "GPIL",
+        "invested": "30%  ",
+        "cmp": "CMP: 633.55",
+        "note": ""
+      },
+      {
+        "symbol": "MEDPLUS",
+        "invested": "10%  0",
+        "cmp": "CMP: 769.7",
+        "note": ""
+      },
+      {
+        "symbol": "BHEL",
+        "invested": "20%  ",
+        "cmp": "CMP: 131.1",
+        "note": ""
+      }
+    ],
+    "column4": [
+      {
+        "symbol": "INFOSYS",
+        "invested": "30%  0",
+        "cmp": "CMP: 1424",
+        "note": ""
+      },
+      {
+        "symbol": "AARTIDRUGS",
+        "invested": "10%  0",
+        "cmp": "CMP: 546",
+        "note": ""
+      },
+      {
+        "symbol": "MOTHERSON",
+        "invested": "30%  0",
+        "cmp": "CMP: 95.9",
+        "note": ""
+      },
+      {
+        "symbol": "KPITTECH",
+        "invested": "30%  ",
+        "cmp": "CMP: 1152",
+        "note": ""
+      }
+    ],
+    "column5": [
+      {
+        "symbol": "HAPPSTMNDS",
+        "invested": "10%  0",
+        "cmp": "CMP: 857",
+        "note": ""
+      },
+      {
+        "symbol": "KPITTECH",
+        "invested": "20%  0",
+        "cmp": "CMP: 1133",
+        "note": ""
+      }
+    ],
+    "column6": [],
+    "column7": []
+  }
+]

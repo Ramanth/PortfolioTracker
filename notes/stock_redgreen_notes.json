@@ -1,0 +1,386 @@
+[
+  {
+    "column1": [
+      {
+        "symbol": "SANSERA",
+        "invested": {},
+        "cmp": "CMP: 955",
+        "note": {}
+      },
+      {
+        "symbol": "ENGENEERIND",
+        "invested": {},
+        "cmp": "CMP: 160",
+        "note": {}
+      },
+      {
+        "symbol": "AARTIDRUGS",
+        "invested": {},
+        "cmp": "CMP: 592",
+        "note": {}
+      },
+      {
+        "symbol": "SUPRAJIT",
+        "invested": {},
+        "cmp": "CMP: 417",
+        "note": {}
+      },
+      {
+        "symbol": "WIPRO",
+        "invested": {},
+        "cmp": "CMP: 416",
+        "note": {}
+      },
+      {
+        "symbol": "VEDANTA",
+        "invested": {},
+        "cmp": "CMP: 274",
+        "note": {}
+      },
+      {
+        "symbol": "HAPPSTMNDS",
+        "invested": {},
+        "cmp": "CMP: 891",
+        "note": {}
+      },
+      {
+        "symbol": "CIEINDIA",
+        "invested": {},
+        "cmp": "CMP: 485",
+        "note": {}
+      },
+      {
+        "symbol": "SANGHIIND",
+        "invested": {},
+        "cmp": "CMP: 126",
+        "note": {}
+      },
+      {
+        "symbol": "GMBREW",
+        "invested": {},
+        "cmp": "CMP: 700",
+        "note": {}
+      },
+      {
+        "symbol": "HINDCOPPER",
+        "invested": {},
+        "cmp": "CMP: 162",
+        "note": {}
+      },
+      {
+        "symbol": "VRLLOG",
+        "invested": {},
+        "cmp": "CMP: 705",
+        "note": {}
+      },
+      {
+        "symbol": "FINPIPE",
+        "invested": {},
+        "cmp": "CMP: 222",
+        "note": {}
+      },
+      {
+        "symbol": "LIC",
+        "invested": {},
+        "cmp": "CMP: 643",
+        "note": {}
+      },
+      {
+        "symbol": "JSWSTEEL",
+        "invested": {},
+        "cmp": "CMP: 809",
+        "note": {}
+      },
+      {
+        "symbol": "BHEL",
+        "invested": {},
+        "cmp": "CMP: 134",
+        "note": {}
+      },
+      {
+        "symbol": "MOTHERSON",
+        "invested": {},
+        "cmp": "CMP: 97.44",
+        "note": {}
+      },
+      {
+        "symbol": "AARTIIND",
+        "invested": {},
+        "cmp": "CMP: 485",
+        "note": {}
+      },
+      {
+        "symbol": "ASHOKLEY",
+        "invested": {},
+        "cmp": "CMP: 177",
+        "note": {}
+      },
+      {
+        "symbol": "JUBLFOOD",
+        "invested": {},
+        "cmp": "CMP: 536",
+        "note": {}
+      },
+      {
+        "symbol": "APLAPOLLO",
+        "invested": {},
+        "cmp": "CMP: 1669",
+        "note": {}
+      },
+      {
+        "symbol": "SUNPHARMA",
+        "invested": {},
+        "cmp": "CMP: 1158",
+        "note": {}
+      },
+      {
+        "symbol": "SBICARD",
+        "invested": {},
+        "cmp": "CMP: 791",
+        "note": {}
+      }
+    ],
+    "column2": [
+      {
+        "symbol": "HDFCLIFE",
+        "invested": {},
+        "cmp": "CMP: 637.4",
+        "note": {}
+      },
+      {
+        "symbol": "INFOEDGE",
+        "invested": {},
+        "cmp": "CMP: 4225",
+        "note": {}
+      },
+      {
+        "symbol": "ICICIBANK",
+        "invested": {},
+        "cmp": "CMP: 946",
+        "note": {}
+      },
+      {
+        "symbol": "INFOSYS",
+        "invested": {},
+        "cmp": "CMP: 1424",
+        "note": {}
+      },
+      {
+        "symbol": "JSWENERGY",
+        "invested": {},
+        "cmp": "CMP: 399",
+        "note": {}
+      },
+      {
+        "symbol": "ITC",
+        "invested": {},
+        "cmp": "CMP: 442",
+        "note": {}
+      },
+      {
+        "symbol": "IOCL",
+        "invested": {},
+        "cmp": "CMP: 93",
+        "note": {}
+      }
+    ],
+    "column3": [
+      {
+        "symbol": "LATENTVIEW",
+        "invested": {},
+        "cmp": "CMP: 409",
+        "note": {}
+      },
+      {
+        "symbol": "TRIDENT",
+        "invested": {},
+        "cmp": "CMP: 35.85",
+        "note": {}
+      },
+      {
+        "symbol": "GPIL",
+        "invested": {},
+        "cmp": "CMP: 635",
+        "note": {}
+      },
+      {
+        "symbol": "HDFCBANK",
+        "invested": {},
+        "cmp": "CMP: 1517",
+        "note": {}
+      },
+      {
+        "symbol": "HINDALCO",
+        "invested": {},
+        "cmp": "CMP: 473",
+        "note": {}
+      }
+    ],
+    "column4": [
+      {
+        "symbol": "TATACHEM",
+        "invested": {},
+        "cmp": "CMP: 970",
+        "note": {}
+      },
+      {
+        "symbol": "FIVESTAR",
+        "invested": {},
+        "cmp": "CMP: 750.4",
+        "note": {}
+      },
+      {
+        "symbol": "MEDPLUS",
+        "invested": {},
+        "cmp": "CMP: 799",
+        "note": {}
+      }
+    ],
+    "column5": [
+      {
+        "symbol": "SULA",
+        "invested": {},
+        "cmp": "CMP: 470",
+        "note": {}
+      }
+    ],
+    "column6": [
+      {
+        "symbol": "EMAMILTD",
+        "invested": {},
+        "cmp": "CMP: 505",
+        "note": {}
+      },
+      {
+        "symbol": "RAILTEL",
+        "invested": {},
+        "cmp": "CMP: 223",
+        "note": {}
+      },
+      {
+        "symbol": "SAIL",
+        "invested": {},
+        "cmp": "CMP: 83.10",
+        "note": {}
+      }
+    ],
+    "column7": [
+      {
+        "symbol": "TATASTEEL",
+        "invested": {},
+        "cmp": "CMP: 117",
+        "note": {}
+      }
+    ],
+    "column8": [
+      {
+        "symbol": "TATAMOTORS",
+        "invested": {},
+        "cmp": "CMP: 612",
+        "note": {}
+      },
+      {
+        "symbol": "ATULAUTO",
+        "invested": {},
+        "cmp": "CMP: 600",
+        "note": {}
+      },
+      {
+        "symbol": "PPLPHARMA",
+        "invested": {},
+        "cmp": "CMP: 99.18",
+        "note": {}
+      }
+    ],
+    "column9": [
+      {
+        "symbol": "AIRTEL",
+        "invested": {},
+        "cmp": "CMP: 863",
+        "note": {}
+      },
+      {
+        "symbol": "ZOMATO",
+        "invested": {},
+        "cmp": "CMP: 98.45",
+        "note": {}
+      },
+      {
+        "symbol": "MOTILALOFS",
+        "invested": {},
+        "cmp": "CMP: 967",
+        "note": {}
+      },
+      {
+        "symbol": "CMSINFO",
+        "invested": {},
+        "cmp": "CMP: 355",
+        "note": {}
+      },
+      {
+        "symbol": "KPITTECH",
+        "invested": {},
+        "cmp": "CMP: 1128",
+        "note": {}
+      },
+      {
+        "symbol": "SONATA",
+        "invested": {},
+        "cmp": "CMP: 1076",
+        "note": {}
+      }
+    ],
+    "column10": [
+      {
+        "symbol": "BIRLASOFT",
+        "invested": {},
+        "cmp": "CMP: 494",
+        "note": {}
+      },
+      {
+        "symbol": "CREDGRAMEEN",
+        "invested": {},
+        "cmp": "CMP: 1436",
+        "note": {}
+      }
+    ],
+    "column11": [
+      {
+        "symbol": "NMDC",
+        "invested": {},
+        "cmp": "CMP: 127",
+        "note": {}
+      },
+      {
+        "symbol": "IIFLSEC",
+        "invested": {},
+        "cmp": "CMP: 72.9",
+        "note": {}
+      },
+      {
+        "symbol": "SUZLON",
+        "invested": {},
+        "cmp": "CMP: 22.8",
+        "note": {}
+      },
+      {
+        "symbol": "POWERGRID",
+        "invested": {},
+        "cmp": "CMP: 168",
+        "note": {}
+      },
+      {
+        "symbol": "KIRLOSENG",
+        "invested": {},
+        "cmp": "CMP: 472",
+        "note": {}
+      },
+      {
+        "symbol": "NAM-IND",
+        "invested": {},
+        "cmp": "CMP: 327",
+        "note": {}
+      }
+    ]
+  }
+]

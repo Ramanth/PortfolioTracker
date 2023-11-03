@@ -1,0 +1,17 @@
+{
+    "CIEINDIA": {
+        "label": "waya build-pos"
+    },
+    "ITC":{
+        "label": "build-pos"
+    },
+    "AARTIDRUGS":{
+        "label":"viv-hold"
+    },
+    "AARTIIND":{
+        "label":"waya build-pos"
+    },
+    "ASHOKLEY":{
+        "label":"building-pos"
+    }
+}

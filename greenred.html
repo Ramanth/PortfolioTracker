@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop Notes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .column {
+            flex: 1;
+            background-color: #f0f0f0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px;
+        }
+
+        .card {
+            background-color: #fff;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: grab;
+            border: 1px solid #ccc;
+            position: relative;
+            padding: 20px;
+            /* Add padding to create space for text */
+        }
+
+        .label {
+            position: absolute;
+            /* Adjust the top position to your preference */
+            right: 10px;
+            /* Adjust the right position to your preference */
+            background-color: #e3c952eb;
+            /* Background color of the label */
+            color: #060000;
+            /* Text color of the label */
+            padding: 0px 20px;
+            /* Padding for the label */
+        }
+
+        .popup {
+            font-size: 12px;
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            z-index: 1;
+            /* Ensure the popup is above other content */
+        }
+
+        .card:hover .popup {
+            display: none;
+            /* Show the popup on hover */
+        }
+
+        .newpopup {
+            font-size: 12px;
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            z-index: 1;
+            /* Ensure the popup is above other content */
+        }
+
+        .card:hover .newpopup {
+            display: block;
+            /* Show the popup on hover */
+        }
+
+        .progress-bar {
+            height: 10px;
+            /* Adjust height of the progress bar */
+            width: 50%;
+            /* Initial progress width set to 0% */
+            background-color: #4CAF50;
+            margin-top: 10px;
+            /* Add margin to separate progress bar and text */
+        }
+
+        /* Define a class for the element with the border */
+        .border-highlight {
+            border: 2px solid transparent;
+            /* Start with a transparent border */
+            transition: border-color 1ms, border-width 1ms;
+            /* Apply transition effect to border color and width */
+            display: inline-block;
+        }
+
+        /* Define the hover effect */
+        .border-highlight:hover {
+            border-color: #e6d00b;
+            /* Highlight border color */
+            border-width: 4px;
+            /* Increase border width */
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+            <button onclick="iterateAndCheckSoldPrices()">Curr price less than last sell price</button>
+            <button onclick="currPriceMoreThanLastSellPrice()">Curr price more than last sell price</button>
+    </div>
+    <div class="container">
+
+                <div class="column" id="column1" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <h2 style="background-color: #949494">Grey</h2>
+                </div>
+        
+                <div class="column" id="column2" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <h2 style="background-color: #d1001f">Red</h2>
+                </div>
+                <div class="column" id="column3" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <h2 style="background-color: #f84549">Red</h2>
+                </div>
+                <div class="column" id="column4" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <h2 style="background-color: #f69697">Red</h2>
+                </div>
+                <div class="column" id="column5" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <h2 style="background-color: #ffcbd1">Red</h2>
+                </div>
+                <div class="column" id="column6" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <h2 style="background-color: #c6ebd5"> Green</h2>
+                </div>
+                <div class="column" id="column7" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <h2 style="background-color: #79d2a0">Green</h2>
+                </div>
+                <div class="column" id="column8" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <h2 style="background-color: #1b8a52">Green</h2>
+                </div>
+                <div class="column" id="column9" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <h2 style="background-color: #caf0f8">Blue</h2>
+                </div>
+                <div class="column" id="column10" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <h2 style="background-color: #48cae4">Blue</h2>
+                </div>
+                <div class="column" id="column11" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <h2 style="background-color: #0F52BA">Blue</h2>
+                </div>
+
+       
+    </div>
+
+    <div>
+        <input type="text" id="symbol" placeholder="Symbol">
+        <input type="text" id="invested" placeholder="Invested Amount">
+        <input type="text" id="pl" placeholder="Profit/Loss">
+        <input type="text" id="cmp" placeholder="CMP">
+        <input type="text" id="note" placeholder="Notes">
+        <button onclick="createCard()">Create Card</button>
+        <button onclick="loadStateFromLocalStorage()">Load</button>
+        <button onclick="saveStateToLocalStorage()">Save</button>
+    </div>
+
+    <script>
+        let cardId = 1;
+
+        function createCard() {
+            const symbol = document.getElementById("symbol").value.trim();
+            const invested = document.getElementById("invested").value.trim();
+            const pl = document.getElementById("pl").value.trim();
+            const cmp = document.getElementById("cmp").value.trim();
+            const note = document.getElementById("note").value.trim();
+
+
+            if (symbol !== "") {
+                const card = document.createElement("div");
+                card.className = "card";
+                card.draggable = true;
+                card.id = "card" + cardId++;
+                card.setAttribute("ondragstart", "drag(event)");
+
+                const progressBar = document.createElement("div");
+                progressBar.className = "progress-bar"
+
+                const symboldiv = document.createElement("div");
+                symboldiv.className = "symbol-div"
+                symboldiv.innerText = symbol
+
+                const investeddiv = document.createElement("div");
+                investeddiv.className = "invested-div"
+                investeddiv.innerText = invested + "  " + pl
+
+                const cmpdiv = document.createElement("div");
+                cmpdiv.className = "cmp-div"
+                cmpdiv.innerText = "CMP: " + cmp
+
+                const notediv = document.createElement("div");
+                notediv.className = "note-div"
+                notediv.innerText = "Note: " + note
+
+                card.appendChild(symboldiv);
+                card.appendChild(investeddiv);
+                card.appendChild(cmpdiv);
+                card.appendChild(notediv);
+                card.appendChild(progressBar);
+
+                document.getElementById("column1").appendChild(card);
+
+                document.getElementById("symbol").value = "";
+                document.getElementById("invested").value = "";
+                document.getElementById("pl").value = "";
+                document.getElementById("cmp").value = "";
+                document.getElementById("note").value = "";
+
+            }
+        }
+
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.id);
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const data = event.dataTransfer.getData("text");
+            const targetColumn = event.target;
+            if (targetColumn.className === "column") {
+                targetColumn.appendChild(document.getElementById(data));
+            }
+        }
+
+        // Function to save the state to local storage
+        function saveStateToLocalStorage() {
+            const columns = document.querySelectorAll('.column');
+            const state = {};
+
+            columns.forEach(column => {
+                //const stage = column.querySelector('h2').textContent;
+                const stage = column.id
+                //const cards = Array.from(column.querySelectorAll('.card')).map(card => card.textContent);
+                const cardObjects = Array.from(column.querySelectorAll('.card')).map(card => {
+                    const symbol = card.querySelector('.symbol-div').textContent;
+                    // const invested = card.querySelector('.invested-div').textContent;
+                    const cmp = card.querySelector('.cmp-div').textContent;
+                    //const note = card.querySelector('.note-div').textContent;
+
+
+                    const progressBar = card.querySelector('.progress-bar');
+                    const progress = progressBar ? progressBar.style.width : '0%'; // Default to '0%' if no progress-bar found
+                    return { "symbol": symbol, "invested": invested, "cmp": cmp, "note": note };
+                });
+                state[stage] = cardObjects;
+            });
+
+            localStorage.setItem('stockStateRedGreen', JSON.stringify(state));
+            createCardOnServer(state)
+
+        }
+
+        function handleBuyClick(argument) {
+            if (window.confirm("confirm buying")) {
+                createLogOnServer(argument + " - " + "BUY" + " - 1x")
+            }
+        }
+
+        function handleSellClick(argument) {
+            if (window.confirm("confirm selling")) {
+                createLogOnServer(argument + " - " + "SELL" + " - 1x")
+            }
+        }
+
+        function loadStateFromLocalStorage() {
+            //const stateJSON = localStorage.getItem('cardState');
+            getNotes()
+                .then((stateJSON) => {
+                    if (stateJSON) {
+                        // const state = JSON.parse(stateJSON);
+                        const state = stateJSON[0]
+
+                        Object.keys(state).forEach((stage) => {
+                            const columnId = stage.toLowerCase().replace(' ', '');
+                            const column = document.getElementById(columnId);
+
+                            if (column) {
+                                state[stage].forEach((obj) => {
+                                    const card = document.createElement('div');
+                                    card.className = 'card';
+                                    card.draggable = true;
+                                    card.id = 'card' + cardId++;
+                                    card.setAttribute('ondragstart', 'drag(event)');
+
+
+                                    // const progressBar = document.createElement("div");
+                                    // progressBar.className = "progress-bar"
+
+                                    const symboldiv = document.createElement("div");
+                                    symboldiv.className = "symbol-div"
+                                    symboldiv.style.fontWeight = "bold"
+                                    symboldiv.innerText = obj.symbol
+
+                                    // const investeddiv = document.createElement("div");
+                                    // investeddiv.className = "invested-div"
+                                    // investeddiv.innerText = obj.invested 
+
+                                    const cmpdiv = document.createElement("div");
+                                    cmpdiv.className = "cmp-div"
+                                    cmpdiv.innerText = obj.cmp
+
+                                    const notediv = document.createElement("div");
+                                    notediv.className = "note-div"
+                                    notediv.innerText = obj.note
+
+
+                                    card.appendChild(symboldiv);
+                                    // card.appendChild(investeddiv);
+                                    card.appendChild(cmpdiv);
+                                    //card.appendChild(notediv);
+
+                                    // invAmt = Number(obj.invested.split(" ")[0]) / 125000 * 100 + "%"
+                                    // const progressBar = document.createElement("div");
+                                    // progressBar.className = "progress-bar"
+                                    // progressBar.style.width = invAmt
+                                    //card.appendChild(progressBar);
+
+                                    const button = document.createElement("button");
+                                    button.className = "buy-button"
+                                    button.innerText = "Buy"
+                                    button.addEventListener('click', function () {
+                                        const argumentValue = obj.symbol;
+                                        handleBuyClick(argumentValue);
+                                    });
+                                    card.appendChild(button);
+
+                                    const sellButton = document.createElement("button");
+                                    sellButton.className = "buy-button"
+                                    sellButton.innerText = "Sell"
+                                    sellButton.addEventListener('click', function () {
+                                        const argumentValue = obj.symbol;
+                                        handleSellClick(argumentValue);
+                                    });
+                                    card.appendChild(sellButton);
+
+
+                                    getStockPrice(obj.symbol).then((stockPrice) => {
+                                        prevCMP = Number(obj.cmp.split(" ")[1])
+                                        diff = ((Number(stockPrice.price) - prevCMP) / prevCMP) * 100
+                                        colorCode = getColorCodeByDiff(diff)
+                                        card.style.backgroundColor = colorCode
+
+                                        const currPriceDiv = document.createElement("div");
+                                        currPriceDiv.className = "currprice-div"
+                                        currPriceDiv.innerText = stockPrice.price
+                                        card.appendChild(currPriceDiv);
+                                        card.classList.add(stockPrice.data.classes);
+
+                                        if (stockPrice.data.label) {
+                                            const label = document.createElement('div');
+                                            label.className = 'label';
+                                            label.innerText = stockPrice.data.label
+
+                                            card.appendChild(label);
+                                        }
+
+                                        column.appendChild(card);
+                                    }).catch((error) => {
+                                        column.appendChild(card);
+                                    })
+
+                                    fetchPopupTextFromAPI(obj.symbol, function (error, text) {
+
+                                        if (error) {
+                                            console.error('Error fetching data:', error);
+                                        } else {
+                                            const popupdiv = document.createElement("div");
+                                            popupdiv.className = "popup"
+                                            popupdiv.innerText = text
+                                            card.appendChild(popupdiv);
+
+                                            const newPopupDiv = createDivWithStrings(JSON.parse(text))
+                                            newPopupDiv.className = "newpopup"
+                                            card.appendChild(newPopupDiv);
+
+                                        }
+                                    });
+
+                                });
+                            }
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function createDivWithStrings(strings) {
+        // Create a new div element
+        var divElement = document.createElement('div');
+
+        // Loop through the array of strings and add each string to the div
+        for (var i = 0; i < strings.length; i++) {
+            // Create a new text node with the string
+            var textNode = document.createTextNode(strings[i]);
+            
+            // Create a line break element
+            var br = document.createElement('br');
+            
+            // Append the text node and line break to the div
+            divElement.appendChild(textNode);
+            divElement.appendChild(br);
+        }
+
+        // Remove the trailing line break
+        divElement.removeChild(divElement.lastChild);
+
+        // Return the div element with the strings
+        return divElement;
+    }
+
+
+        function getColorCodeByDiff(diff) {
+            if (diff < -9) {
+                return "#808080"
+            }
+
+            if (diff < -7) {
+                return "#949494"
+            }
+
+            if (diff < -5) {
+                return "#d3d3d3"
+            }
+
+            if (diff < -3) {
+                return "#d1001f"
+            }
+
+            if (diff < -2) {
+                return "#f94449"
+            }
+
+            if (diff < -1) {
+                return "#f69697"
+            }
+
+            if (diff < 0) {
+                return "#ffcbd1"
+            }
+
+            if (diff < 1) {
+                return "#c6ebd5"
+            }
+
+            if (diff < 2) {
+                return "#79d2a0"
+            }
+
+            if (diff < 3) {
+                return "#2cae6b"
+            }
+
+            if (diff < 5) {
+                return "#1b8a52"
+
+            }
+
+            if (diff < 9) {
+
+                return "#caf0f8"  //light blue
+            }
+
+            if (diff < 12) {
+                return "#48cae4"     // medium blue
+            }
+
+            return "#0F52BA"
+        }
+
+        function createCardOnServer(cardText) {
+            const apiUrl = 'http://localhost:3000/stocks/redgreen';
+            const requestData = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(cardText), // Assuming you want to send card text as JSON
+            };
+
+            fetch(apiUrl, requestData)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP Error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log('Card created successfully:', data);
+                    // Optionally, you can perform actions after the card is created
+                })
+                .catch((error) => {
+                    console.error('Error creating card:', error);
+                    // Handle the error as needed
+                });
+        }
+
+        function createLogOnServer(text) {
+            const apiUrl = 'http://localhost:3000/stock/log';
+            const requestData = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: text })
+            };
+
+            fetch(apiUrl, requestData)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP Error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log('Card created successfully:', data);
+                    // Optionally, you can perform actions after the card is created
+                })
+                .catch((error) => {
+                    console.error('Error creating card:', error);
+                    // Handle the error as needed
+                });
+        }
+
+        function getNotes() {
+            const apiUrl = 'http://localhost:3000/stocks/redgreen';
+
+            return fetch(apiUrl)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP Error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    return data;
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    throw error; // You can handle the error as needed
+                });
+        }
+
+        function getStockPrice(stockName) {
+            const apiUrl = 'http://localhost:3000/stock/price/' + stockName;
+
+            return fetch(apiUrl)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP Error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    return data;
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    throw error; // You can handle the error as needed
+                });
+        }
+
+        function getPopupText(stockName) {
+            const apiUrl = 'http://localhost:3000/stock/popup/' + stockName;
+
+            return fetch(apiUrl)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP Error! Status: ${response.status}`);
+                    }
+                    return response;
+                })
+                .then((data) => {
+                    return data;
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    throw error; // You can handle the error as needed
+                });
+        }
+
+        function fetchPopupTextFromAPI(stockName, callback) {
+            const url = 'http://localhost:3000/stock/popup/' + stockName;
+            const xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        callback(null, xhr.responseText); // Pass the response text to the callback
+                    } else {
+                        callback(new Error(`HTTP error! Status: ${xhr.status}`), null);
+                    }
+                }
+            };
+
+            xhr.open('GET', url, true);
+            xhr.send();
+        }
+
+        function iterateAndCheckSoldPrices() {
+            cards = document.getElementsByClassName("card")
+
+            for(let card of cards){
+                popupContent = card.getElementsByClassName("popup")[0]?.textContent
+                if(popupContent){
+                    recentSell = JSON.parse(popupContent).filter(x => x.startsWith("sell"))[0]?.split("@")[1].trim()
+                    cmpDivText = card.getElementsByClassName("currprice-div")[0]?.textContent
+                    if(recentSell){
+                        recentSellAmt = Number(recentSell)
+                        cmpAmt = Number(cmpDivText)
+                        diff = cmpAmt - recentSellAmt
+                        if(diff < 0){
+                            card.classList.add("border-highlight")
+                        }
+                    }
+                }
+            }
+        }
+
+        function currPriceMoreThanLastSellPrice(){
+            cards = document.getElementsByClassName("card")
+
+            for(let card of cards){
+                popupContent = card.getElementsByClassName("popup")[0]?.textContent
+                if(popupContent){
+                    recentSell =  JSON.parse(popupContent).filter(x => x.startsWith("sell"))[0]?.split("@")[1].trim()
+                    cmpDivText = card.getElementsByClassName("currprice-div")[0]?.textContent
+                    if(recentSell){
+                        recentSellAmt = Number(recentSell)
+                        cmpAmt = Number(cmpDivText)
+                        diff = cmpAmt - recentSellAmt
+                        if(diff > 0){
+                            card.classList.add("border-highlight")
+                        }
+                    }
+                }
+            }
+        }
+
+
+        // Call this function when your page loads to load the saved state
+        window.addEventListener('load', function () {
+            
+            loadStateFromLocalStorage();
+        });
+
+    </script>
+</body>
+
+</html>
